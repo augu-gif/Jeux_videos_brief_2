@@ -316,7 +316,7 @@ while continuer:
         #permet d"actualiser les sprites
         for mon_sprite in all_sprite:
             screen.blit(mon_sprite.surf, mon_sprite.rect) # type:ignore
-                    #permet d"actualiser les sprites
+        #permet d"actualiser les sprites
         for mon_sprite in all_sprite:
             screen.blit(mon_sprite.surf, mon_sprite.rect) # type:ignore
 
@@ -333,7 +333,7 @@ while continuer:
         background_gameover = pygame.transform.scale(background_gameover, (largeur_ecran, hauteur_ecran))
 
         # Créer un panneau semi-transparent
-        panneau = pygame.Surface((largeur_ecran - 500, 200), pygame.SRCALPHA)
+        panneau = pygame.Surface((largeur_ecran - 450, 350), pygame.SRCALPHA)
         panneau.fill((0, 0, 0, 190))
         panneau_rect = panneau.get_rect(center=(largeur_ecran // 2, hauteur_ecran // 2 + 175))
         screen.blit(panneau, panneau_rect)
@@ -353,16 +353,16 @@ while continuer:
             texte_highscore = police_score.render(f"Highscore : {highscore}", True, (255, 215, 0))
         screen.blit(texte_highscore, texte_highscore.get_rect(center=(largeur_ecran // 2, hauteur_ecran // 2 + 205)))
         
-
         # Invite à rejouer en jaune
         texte_rejouer = police_rejouer.render("ENTREE : REJOUER", True, (255, 220, 0))
-        texte_rejouer_rect = texte_rejouer.get_rect(center=(largeur_ecran // 2, hauteur_ecran // 2 + 215))
+        texte_rejouer_rect = texte_rejouer.get_rect(center=(largeur_ecran // 2, hauteur_ecran // 2 + 300))
         screen.blit(texte_rejouer, texte_rejouer_rect)
 
         #Echape pour quitter
         texte_quitter = police_rejouer.render("ECHAP : QUTTER", True, (255, 220, 0))
-        texte_quitter_rect = texte_rejouer.get_rect(center=(largeur_ecran // 2, hauteur_ecran // 2 + 250))
+        texte_quitter_rect = texte_rejouer.get_rect(center=(largeur_ecran // 2, hauteur_ecran // 2 + 325))
         screen.blit(texte_quitter, texte_quitter_rect)
+    
     pygame.display.flip()
     #vitessse du jeu (60 images /seconde)
     clock.tick(60)
