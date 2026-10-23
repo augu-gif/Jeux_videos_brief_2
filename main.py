@@ -57,6 +57,25 @@ def changer_musique_game_over(musique):
     pygame.mixer.music.set_volume(0.2)
     pygame.mixer.music.play(0)
 
+
+#  HIGHSCORE : fichier pour stocker le score le plus élevé
+
+FICHIER_HIGHSCORE = DOSSIER_PROJET / "highscore.txt"
+
+def charger_highscore():
+    # Lire le contenu du fichier et le convertir en entier, ou retourner 0 si le fichier n'existe pas ou est vide
+    try:
+        return int(FICHIER_HIGHSCORE.read_text())
+    except (FileNotFoundError, ValueError):
+        return 0
+
+def sauvegarder_highscore(valeur):
+    # Écrire la valeur du score dans le fichier
+    FICHIER_HIGHSCORE.write_text(str(valeur))
+
+highscore = charger_highscore()
+nouveau_record = False   
+
 #Ajout de la police du texte
 
 titre = pygame.font.Font(str(DOSSIER_PROJET / "ressources" / "DS-DIGI.TTF"), 72) 
@@ -82,6 +101,7 @@ background_gameover = pygame.image.load(str(DOSSIER_PROJET / "ressources" / "gam
 background_menu = pygame.transform.scale(background_menu, (largeur_ecran, hauteur_ecran))
 
 if etat_jeu == "menu":
+    
     screen.blit(background_menu, (0, 0))
     changer_musique(son_main_menu)
 
@@ -210,6 +230,7 @@ all_sprite.add(score)
 AJOUTE_ENNEMY = pygame.USEREVENT + 1
 pygame.time.set_timer(AJOUTE_ENNEMY, 500)  
 
+
 #initialisation de la boucle du jeu
 
 continuer = True
@@ -248,7 +269,8 @@ while continuer:
             all_sprite.add(nouvel_ennemi)
             les_ennemis.add(nouvel_ennemi)
     # Initialise les sprites et les updates   
-    if etat_jeu == "jeu":        
+    if etat_jeu == "jeu":    
+            
         screen.blit(background, (0, 0))
 
         screen.blit(vaisseau.surf, vaisseau.rect) # type: ignore 
@@ -271,6 +293,14 @@ while continuer:
             changer_musique_game_over(son_game_over)
             les_explosions.add(explosion)
             all_sprite.add(explosion)
+
+            # Vérifie si le score actuel est supérieur au highscore et met à jour le fichier si nécessaire
+            if score._scoreCourant > highscore:
+                highscore = score._scoreCourant
+                nouveau_record = False
+                sauvegarder_highscore(highscore)
+                nouveau_record = True
+
         #lance une boucle et ajoute dans une liste les missiles qui ont détruis les ennemis 
         for missile in le_missile:
             liste_ennemis_touches = pygame.sprite.spritecollide(missile, les_ennemis, True)
@@ -286,10 +316,21 @@ while continuer:
         #permet d"actualiser les sprites
         for mon_sprite in all_sprite:
             screen.blit(mon_sprite.surf, mon_sprite.rect) # type:ignore
+                    #permet d"actualiser les sprites
+        for mon_sprite in all_sprite:
+            screen.blit(mon_sprite.surf, mon_sprite.rect) # type:ignore
+
+        # HIGHSCORE pendant le jeu
+        meilleur = max(highscore, score._scoreCourant)
+        texte_hs = police_score.render(f"Highscore : {meilleur}", True, (255, 215, 0))
+        texte_hs_rect = texte_hs.get_rect(topright=(largeur_ecran - 20, 5))
+        screen.blit(texte_hs, texte_hs_rect)
+
     #lance l'écrans de game over
     if etat_jeu == "game_over":
-        
-        screen.blit(background_gameover, (0, 0))
+
+        screen.blit(background_gameover, (0, 0))    
+        background_gameover = pygame.transform.scale(background_gameover, (largeur_ecran, hauteur_ecran))
 
         # Créer un panneau semi-transparent
         panneau = pygame.Surface((largeur_ecran - 500, 200), pygame.SRCALPHA)
@@ -297,17 +338,23 @@ while continuer:
         panneau_rect = panneau.get_rect(center=(largeur_ecran // 2, hauteur_ecran // 2 + 175))
         screen.blit(panneau, panneau_rect)
 
-        # Titre GAME OVER
+        # Titre "GAME OVER" en rouge
         texte_game_over = titre.render("GAME OVER", True, (255, 50, 50))
-        texte_game_over_rect = texte_game_over.get_rect(center=(largeur_ecran // 2, hauteur_ecran // 2 + 100))
-        screen.blit(texte_game_over, texte_game_over_rect)  
+        screen.blit(texte_game_over, texte_game_over.get_rect(center=(largeur_ecran // 2, hauteur_ecran // 2 + 85)))
 
-        # Score final
+        # Pontuation finale en blanc
         texte_score_final = police_score.render(f"Score final : {score._scoreCourant}", True, (255, 255, 255))
-        texte_score_final_rect = texte_score_final.get_rect(center=(largeur_ecran // 2, hauteur_ecran // 2 + 160))
-        screen.blit(texte_score_final, texte_score_final_rect)
+        screen.blit(texte_score_final, texte_score_final.get_rect(center=(largeur_ecran // 2, hauteur_ecran // 2 + 150)))
 
-        # Invitation à rejouer
+        # HIGHSCORE
+        if nouveau_record:
+            texte_highscore = police_score.render(f"NOUVEAU RECORD : {highscore} !", True, (255, 215, 0))
+        else:
+            texte_highscore = police_score.render(f"Highscore : {highscore}", True, (255, 215, 0))
+        screen.blit(texte_highscore, texte_highscore.get_rect(center=(largeur_ecran // 2, hauteur_ecran // 2 + 205)))
+        
+
+        # Invite à rejouer en jaune
         texte_rejouer = police_rejouer.render("ENTREE : REJOUER", True, (255, 220, 0))
         texte_rejouer_rect = texte_rejouer.get_rect(center=(largeur_ecran // 2, hauteur_ecran // 2 + 215))
         screen.blit(texte_rejouer, texte_rejouer_rect)
