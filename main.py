@@ -141,6 +141,7 @@ class Missile(pygame.sprite.Sprite):
         self.rect = self.surf.get_rect(center = center_missile) 
         #supprime le missile quand il sort de l'écran
         son_missile.play()
+        son_missile.set_volume(0.2)
     def update(self):
         self.rect.move_ip(15, 0)
         if self.rect.left > largeur_ecran:
@@ -166,6 +167,7 @@ class Explosion(pygame.sprite.Sprite):
         self.surf = pygame.transform.scale(self.surf, (100, 80))
         self.rect = self.surf.get_rect(center = center_vaisseau)
         son_explosion.play()
+        son_explosion.set_volume(0.7)
     def update(self):
         self._compteur -= 1
         if self._compteur == 0:
@@ -272,19 +274,19 @@ while continuer:
         screen.blit(background_gameover, (0, 0))
 
         # Créer un panneau semi-transparent
-        panneau = pygame.Surface((largeur_ecran - 100, 300), pygame.SRCALPHA)
+        panneau = pygame.Surface((largeur_ecran - 50, 200), pygame.SRCALPHA)
         panneau.fill((0, 0, 0, 190))
         panneau_rect = panneau.get_rect(center=(largeur_ecran // 2, hauteur_ecran // 2 + 150))
         screen.blit(panneau, panneau_rect)
 
         # Titre GAME OVER
         texte_game_over = titre.render("GAME OVER", True, (255, 50, 50))
-        texte_game_over_rect = texte_game_over.get_rect(center=(largeur_ecran // 2, hauteur_ecran // 2 + 75))
+        texte_game_over_rect = texte_game_over.get_rect(center=(largeur_ecran // 2, hauteur_ecran // 2 + 100))
         screen.blit(texte_game_over, texte_game_over_rect)  
 
         # Score final
         texte_score_final = police_score.render(f"Score final : {score._scoreCourant}", True, (255, 255, 255))
-        texte_score_final_rect = texte_score_final.get_rect(center=(largeur_ecran // 2, hauteur_ecran // 2 + 150))
+        texte_score_final_rect = texte_score_final.get_rect(center=(largeur_ecran // 2, hauteur_ecran // 2 + 160))
         screen.blit(texte_score_final, texte_score_final_rect)
 
         # Invitation à rejouer
