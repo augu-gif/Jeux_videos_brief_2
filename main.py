@@ -40,10 +40,12 @@ son_missile = pygame.mixer.Sound(str(DOSSIER_PROJET / "ressources" / "missile.wa
 son_explosion = pygame.mixer.Sound(str(DOSSIER_PROJET / "ressources" / "explosion.wav"))
 #son game over
 son_game_over = pygame.mixer.Sound(str(DOSSIER_PROJET / "ressources" / "gameover.wav"))
+#son menu accueil
+son_main_menu = pygame.mixer.Sound(str(DOSSIER_PROJET / "ressources" / "main_menu.wav"))
+#son du jeu
+son_jeu = pygame.mixer.Sound(str(DOSSIER_PROJET / "ressources" / "jeu.wav"))
 
 #Ajout de la police du texte
-
-police_score = pygame.font.SysFont(str(DOSSIER_PROJET / "ressources" / "DS-DIGI.TTF"), 72)
 
 titre = pygame.font.Font(str(DOSSIER_PROJET / "ressources" / "DS-DIGI.TTF"), 72) 
 police_score = pygame.font.Font(str(DOSSIER_PROJET / "ressources" / "DS-DIGI.TTF"), 50)
@@ -69,6 +71,8 @@ background_menu = pygame.transform.scale(background_menu, (largeur_ecran, hauteu
 
 if etat_jeu == "menu":
     screen.blit(background_menu, (0, 0))
+    son_main_menu.set_volume(0.2)
+    son_main_menu.play()
 
 #ajout d'une horloge pour créer le framerate du jeu 
 
@@ -82,7 +86,7 @@ class Score(pygame.sprite.Sprite):
 
     def _setText(self):
         self.surf = police_score.render("Score :" + str(self._scoreCourant), True, (255, 255, 255))
-        self.rect = self.surf.get_rect(center = (largeur_ecran - 100, 30))
+        self.rect = self.surf.get_rect(center = (largeur_ecran - 900, 25))
 
     def update(self):
         self._setText()
@@ -179,7 +183,7 @@ le_missile = pygame.sprite.Group()
 les_ennemis = pygame.sprite.Group()
 les_explosions = pygame.sprite.Group()
 
-all_sprite.add(vaisseau) #type: ignore
+all_sprite.add(vaisseau) 
 all_sprite.add(score)
 
 # Ajoute un ennemi toutes les 500 millisecondes
@@ -207,7 +211,7 @@ while continuer:
             if event.key == pygame.K_SPACE and etat_jeu == "menu":
                 etat_jeu = "jeu"
 
-            if event.key == pygame.K_SPACE and etat_jeu == "game_over":
+            if event.key == pygame.K_RETURN and etat_jeu == "game_over":
                 etat_jeu = "jeu"
                 score._scoreCourant = 0
                 les_ennemis.empty()
@@ -225,6 +229,8 @@ while continuer:
     # Initialise les sprites et les updates   
     if etat_jeu == "jeu":        
         screen.blit(background, (0, 0))
+
+        son_main_menu.stop()
 
         screen.blit(vaisseau.surf, vaisseau.rect) # type: ignore 
 
@@ -268,32 +274,23 @@ while continuer:
         # Créer un panneau semi-transparent
         panneau = pygame.Surface((largeur_ecran - 100, 300), pygame.SRCALPHA)
         panneau.fill((0, 0, 0, 190))
-
-        panneau_rect = panneau.get_rect(center=(largeur_ecran // 2, hauteur_ecran // 2))
-
+        panneau_rect = panneau.get_rect(center=(largeur_ecran // 2, hauteur_ecran // 2 + 150))
         screen.blit(panneau, panneau_rect)
 
         # Titre GAME OVER
         texte_game_over = titre.render("GAME OVER", True, (255, 50, 50))
-
-        texte_game_over_rect = texte_game_over.get_rect(center=(largeur_ecran // 2, hauteur_ecran // 2 - 75))
-
+        texte_game_over_rect = texte_game_over.get_rect(center=(largeur_ecran // 2, hauteur_ecran // 2 + 75))
         screen.blit(texte_game_over, texte_game_over_rect)  
 
         # Score final
         texte_score_final = police_score.render(f"Score final : {score._scoreCourant}", True, (255, 255, 255))
-
-        texte_score_final_rect = texte_score_final.get_rect(center=(largeur_ecran // 2, hauteur_ecran // 2))
-
+        texte_score_final_rect = texte_score_final.get_rect(center=(largeur_ecran // 2, hauteur_ecran // 2 + 150))
         screen.blit(texte_score_final, texte_score_final_rect)
 
         # Invitation à rejouer
-        texte_rejouer = police_rejouer.render("ESPACE : REJOUER", True, (255, 220, 0))
-
-        texte_rejouer_rect = texte_rejouer.get_rect(center=(largeur_ecran // 2, hauteur_ecran // 2 + 65))
-
+        texte_rejouer = police_rejouer.render("ENTREE : REJOUER", True, (255, 220, 0))
+        texte_rejouer_rect = texte_rejouer.get_rect(center=(largeur_ecran // 2, hauteur_ecran // 2 + 215))
         screen.blit(texte_rejouer, texte_rejouer_rect)
-    
     pygame.display.flip()
     #vitessse du jeu (60 images /seconde)
     clock.tick(60)
