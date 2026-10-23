@@ -122,7 +122,7 @@ space-invaders/
     └── missile.png
 ```
 
-## Auteur
+## Auteurs
 
 Augustin Montruil
 
