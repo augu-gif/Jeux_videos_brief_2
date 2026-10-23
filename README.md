@@ -29,6 +29,7 @@ Un jeu vidéo développé en Python avec Pygame.
 Ouvrez un terminal (Linux/macOS) ou Git Bash / PowerShell (Windows), puis exécutez :
 
 git clone https://github.com/augu-gif/Jeux_videos_brief_2.git
+
 cd Jeux_videos_brief_2
 
 # 2. Créer un environnement virtuel
