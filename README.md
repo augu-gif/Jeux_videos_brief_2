@@ -26,8 +26,8 @@ Un jeu vidéo développé en Python avec Pygame dans le cadre de mon apprentissa
 ### 1. Cloner le dépôt
 
 ```bash
-git clone URL_DU_DEPOT
-cd NOM_DU_DEPOT
+git clone https://github.com/augu-gif/Jeux_videos_brief_2
+cd Jeux_videos_brief_2
 ```
 
 ### 2. Créer un environnement virtuel
@@ -53,8 +53,7 @@ Sous Windows :
 ### 4. Installer les dépendances
 
 ```bash
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
+pip install pygame
 ```
 
 ### 5. Lancer le jeu
