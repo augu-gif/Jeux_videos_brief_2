@@ -63,6 +63,7 @@ Si PowerShell bloque l'activation à cause de la politique d'exécution, vous po
 Une fois l'environnement virtuel activé, exécutez :
 
 python -m pip install --upgrade pip
+
 python -m pip install pygame
 
 # 5. Lancer le jeu
