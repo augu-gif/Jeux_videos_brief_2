@@ -115,6 +115,7 @@ class Vaisseau(pygame.sprite.Sprite):
         self.surf = pygame.transform.scale(self.surf, (150, 120)) # type: ignore
         #initialise la position du vaisseau au centre de  l'éfcran
         self.rect = self.surf.get_rect(center = (100, hauteur_ecran/2))
+        self.rect.inflate_ip(-50, -50)
 #Déplacement du vaisseau et tir de missile
     def update(self, pressed_keys):
         if pressed_keys[pygame.K_UP]:
@@ -166,6 +167,7 @@ class Ennemis(pygame.sprite.Sprite):
         self.surf = pygame.image.load(str(DOSSIER_PROJET / "ressources" / "ennemi.png")).convert_alpha()
         self.surf = pygame.transform.scale(self.surf, (100, 80))
         self.rect = self.surf.get_rect(center = (largeur_ecran + 25, random.randint(0, hauteur_ecran)))
+        self.rect.inflate_ip(-30, -30)
         self.speed = random.randint(5, 20)
     def update(self):
         self.rect.move_ip(-self.speed, 0)
@@ -311,13 +313,13 @@ while continuer:
         screen.blit(texte_rejouer, texte_rejouer_rect)
 
         #Echape pour quitter
-        texte_quitter = police_rejouer.render("ECHAPPE : QUTTER", True, (255, 220, 0))
+        texte_quitter = police_rejouer.render("ECHAP : QUTTER", True, (255, 220, 0))
         texte_quitter_rect = texte_rejouer.get_rect(center=(largeur_ecran // 2, hauteur_ecran // 2 + 250))
         screen.blit(texte_quitter, texte_quitter_rect)
     pygame.display.flip()
     #vitessse du jeu (60 images /seconde)
     clock.tick(60)
-pygame.time.delay(3000)
+
 pygame.quit
 
 
