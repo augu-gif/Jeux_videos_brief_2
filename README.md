@@ -40,7 +40,7 @@ python -m pip install pygame
 
 python main.py
 
-## sur Windows copier/coller dans le terminal : 
+## Sur Windows copier/coller dans le terminal : 
 
 git clone https://github.com/augu-gif/Jeux_videos_brief_2.git
 
