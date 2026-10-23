@@ -24,6 +24,38 @@ Un jeu vidéo développé en Python avec Pygame.
 
 ## Installation
 
+## Sur mac ou Linux copier/coller dans le terminal :
+
+git clone https://github.com/augu-gif/Jeux_videos_brief_2.git
+
+cd Jeux_videos_brief_2
+
+python3 -m venv .venv
+
+source .venv/bin/activate
+
+python -m pip install --upgrade pip
+
+python -m pip install pygame
+
+python main.py
+
+## sur Windows copier/coller dans le terminal : 
+
+git clone https://github.com/augu-gif/Jeux_videos_brief_2.git
+
+cd Jeux_videos_brief_2
+
+py -m venv .venv
+
+.\.venv\Scripts\Activate.ps1
+
+python -m pip install --upgrade pip
+
+python -m pip install pygame
+
+python main.py
+
 # 1. Cloner le dépôt
 
 Ouvrez un terminal (Linux/macOS) ou Git Bash / PowerShell (Windows), puis exécutez :
