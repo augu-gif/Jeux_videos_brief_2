@@ -39,11 +39,23 @@ son_missile = pygame.mixer.Sound(str(DOSSIER_PROJET / "ressources" / "missile.wa
 #son explosion
 son_explosion = pygame.mixer.Sound(str(DOSSIER_PROJET / "ressources" / "explosion.wav"))
 #son game over
-son_game_over = pygame.mixer.Sound(str(DOSSIER_PROJET / "ressources" / "gameover.wav"))
+son_game_over = str(DOSSIER_PROJET / "ressources" / "gameover.mp3")
 #son menu accueil
-son_main_menu = pygame.mixer.Sound(str(DOSSIER_PROJET / "ressources" / "main_menu.wav"))
+son_main_menu = str(DOSSIER_PROJET / "ressources" / "main_menu.mp3")
 #son du jeu
-son_jeu = pygame.mixer.Sound(str(DOSSIER_PROJET / "ressources" / "jeu.wav"))
+son_jeu = str(DOSSIER_PROJET / "ressources" / "jeu.mp3")
+
+def changer_musique(musique):
+    pygame.mixer.music.stop()
+    pygame.mixer.music.load(musique)
+    pygame.mixer.music.set_volume(0.4)
+    pygame.mixer.music.play(-1)
+
+def changer_musique_game_over(musique):
+    pygame.mixer.music.stop()
+    pygame.mixer.music.load(musique)
+    pygame.mixer.music.set_volume(0.2)
+    pygame.mixer.music.play(0)
 
 #Ajout de la police du texte
 
@@ -71,8 +83,7 @@ background_menu = pygame.transform.scale(background_menu, (largeur_ecran, hauteu
 
 if etat_jeu == "menu":
     screen.blit(background_menu, (0, 0))
-    son_main_menu.set_volume(0.2)
-    son_main_menu.play()
+    changer_musique(son_main_menu)
 
 #ajout d'une horloge pour créer le framerate du jeu 
 
@@ -101,7 +112,7 @@ class Vaisseau(pygame.sprite.Sprite):
         super(Vaisseau, self).__init__()
         #ajoute l'image du vaisseau et la redimensionne pour qu elle soit adapté à l'écran
         self.surf = pygame.image.load(str(DOSSIER_PROJET / "ressources" / "vaisseau.png")).convert_alpha() # type: ignore
-        self.surf = pygame.transform.scale(self.surf, (100, 80)) # type: ignore
+        self.surf = pygame.transform.scale(self.surf, (150, 120)) # type: ignore
         #initialise la position du vaisseau au centre de  l'éfcran
         self.rect = self.surf.get_rect(center = (100, hauteur_ecran/2))
 #Déplacement du vaisseau et tir de missile
@@ -115,10 +126,12 @@ class Vaisseau(pygame.sprite.Sprite):
         if pressed_keys[pygame.K_RIGHT]:
             self.rect.move_ip(5, 0)
         if pressed_keys[pygame.K_SPACE]:
+            
             if len(le_missile.sprites()) < 1:
                 missile = Missile(self.rect.center) 
                 all_sprite.add(missile) 
                 le_missile.add(missile)
+        
         if self.rect.left < 0:
             self.rect.left = 0
 
@@ -132,7 +145,6 @@ class Vaisseau(pygame.sprite.Sprite):
             self.rect.bottom = 800   
 
 #création de la classe missile pour gérer les missiles du vaisseau
-
 class Missile(pygame.sprite.Sprite):
     def __init__(self, center_missile):
         super().__init__()
@@ -146,6 +158,7 @@ class Missile(pygame.sprite.Sprite):
         self.rect.move_ip(15, 0)
         if self.rect.left > largeur_ecran:
             self.kill()
+
 #création de la classe ennemis
 class Ennemis(pygame.sprite.Sprite):
     def __init__(self):
@@ -158,6 +171,7 @@ class Ennemis(pygame.sprite.Sprite):
         self.rect.move_ip(-self.speed, 0)
         if self.rect.right < 0:
             self.kill()
+
 #création de la classe explosion
 class Explosion(pygame.sprite.Sprite):
     def __init__(self, center_vaisseau):
@@ -175,7 +189,7 @@ class Explosion(pygame.sprite.Sprite):
 
 #ajout du vaisseau à l'écran et à la liste des sprites
 
-vaisseau = Vaisseau() #type: ignore
+vaisseau = Vaisseau() 
 score = Score()
 
 #Appeler tous les sprites du jeu pour les gérer plus facilement
@@ -185,6 +199,7 @@ le_missile = pygame.sprite.Group()
 les_ennemis = pygame.sprite.Group()
 les_explosions = pygame.sprite.Group()
 
+#ajoute les vaisseau et le score dans all sprite pour les actualiser
 all_sprite.add(vaisseau) 
 all_sprite.add(score)
 
@@ -212,9 +227,11 @@ while continuer:
         
             if event.key == pygame.K_SPACE and etat_jeu == "menu":
                 etat_jeu = "jeu"
+                changer_musique(son_jeu)
 
             if event.key == pygame.K_RETURN and etat_jeu == "game_over":
                 etat_jeu = "jeu"
+                changer_musique(son_jeu)
                 score._scoreCourant = 0
                 les_ennemis.empty()
                 le_missile.empty()
@@ -231,8 +248,6 @@ while continuer:
     # Initialise les sprites et les updates   
     if etat_jeu == "jeu":        
         screen.blit(background, (0, 0))
-
-        son_main_menu.stop()
 
         screen.blit(vaisseau.surf, vaisseau.rect) # type: ignore 
 
@@ -251,7 +266,7 @@ while continuer:
         if pygame.sprite.spritecollideany(vaisseau, les_ennemis): # type: ignore
             explosion = Explosion(vaisseau.rect.center)
             etat_jeu = "game_over"
-            son_game_over.play()
+            changer_musique_game_over(son_game_over)
             les_explosions.add(explosion)
             all_sprite.add(explosion)
         #lance une boucle et ajoute dans une liste les missiles qui ont détruis les ennemis 
@@ -271,6 +286,7 @@ while continuer:
             screen.blit(mon_sprite.surf, mon_sprite.rect) # type:ignore
     #lance l'écrans de game over
     if etat_jeu == "game_over":
+        
         screen.blit(background_gameover, (0, 0))
 
         # Créer un panneau semi-transparent
