@@ -118,13 +118,13 @@ class Vaisseau(pygame.sprite.Sprite):
 #Déplacement du vaisseau et tir de missile
     def update(self, pressed_keys):
         if pressed_keys[pygame.K_UP]:
-            self.rect.move_ip(0, -5)
+            self.rect.move_ip(0, -7)
         if pressed_keys[pygame.K_DOWN]:
-            self.rect.move_ip(0, 5)
+            self.rect.move_ip(0, 7)
         if pressed_keys[pygame.K_LEFT]:
-            self.rect.move_ip(-5, 0)
+            self.rect.move_ip(-7, 0)
         if pressed_keys[pygame.K_RIGHT]:
-            self.rect.move_ip(5, 0)
+            self.rect.move_ip(7, 0)
         if pressed_keys[pygame.K_SPACE]:
             
             if len(le_missile.sprites()) < 1:
@@ -165,7 +165,7 @@ class Ennemis(pygame.sprite.Sprite):
         super(Ennemis, self).__init__()
         self.surf = pygame.image.load(str(DOSSIER_PROJET / "ressources" / "ennemi.png")).convert_alpha()
         self.surf = pygame.transform.scale(self.surf, (100, 80))
-        self.rect = self.surf.get_rect(center = (largeur_ecran + 50, random.randint(0, hauteur_ecran)))
+        self.rect = self.surf.get_rect(center = (largeur_ecran + 25, random.randint(0, hauteur_ecran)))
         self.speed = random.randint(5, 20)
     def update(self):
         self.rect.move_ip(-self.speed, 0)
@@ -290,9 +290,9 @@ while continuer:
         screen.blit(background_gameover, (0, 0))
 
         # Créer un panneau semi-transparent
-        panneau = pygame.Surface((largeur_ecran - 50, 200), pygame.SRCALPHA)
+        panneau = pygame.Surface((largeur_ecran - 500, 200), pygame.SRCALPHA)
         panneau.fill((0, 0, 0, 190))
-        panneau_rect = panneau.get_rect(center=(largeur_ecran // 2, hauteur_ecran // 2 + 150))
+        panneau_rect = panneau.get_rect(center=(largeur_ecran // 2, hauteur_ecran // 2 + 175))
         screen.blit(panneau, panneau_rect)
 
         # Titre GAME OVER
@@ -309,6 +309,11 @@ while continuer:
         texte_rejouer = police_rejouer.render("ENTREE : REJOUER", True, (255, 220, 0))
         texte_rejouer_rect = texte_rejouer.get_rect(center=(largeur_ecran // 2, hauteur_ecran // 2 + 215))
         screen.blit(texte_rejouer, texte_rejouer_rect)
+
+        #Echape pour quitter
+        texte_quitter = police_rejouer.render("ECHAPPE : QUTTER", True, (255, 220, 0))
+        texte_quitter_rect = texte_rejouer.get_rect(center=(largeur_ecran // 2, hauteur_ecran // 2 + 250))
+        screen.blit(texte_quitter, texte_quitter_rect)
     pygame.display.flip()
     #vitessse du jeu (60 images /seconde)
     clock.tick(60)
